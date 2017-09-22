@@ -31,11 +31,11 @@ public class RemotePDFViewPager extends ViewPager implements DownloadFile.Listen
     protected Context context;
     protected DownloadFile.Listener listener;
 
-    public RemotePDFViewPager(Context context, String pdfUrl, DownloadFile.Listener listener) {
+    public RemotePDFViewPager(Context context, String pdfUrl, boolean withParams, DownloadFile.Listener listener) {
         super(context);
         this.context = context;
         this.listener = listener;
-        init(pdfUrl);
+        init(pdfUrl, withParams);
     }
 
     public RemotePDFViewPager(Context context, AttributeSet attrs) {
@@ -44,10 +44,26 @@ public class RemotePDFViewPager extends ViewPager implements DownloadFile.Listen
         init(attrs);
     }
 
-    private void init(String pdfUrl) {
+    private void init(String pdfUrl, boolean withParams) {
         DownloadFile downloadFile = new DownloadFileUrlConnectionImpl(context, new Handler(), this);
-        downloadFile.download(pdfUrl,
-                new File(context.getCacheDir(), FileUtil.extractFileNameFromURL(pdfUrl)).getAbsolutePath());
+        if(withParams){
+            downloadFile.download(pdfUrl,
+                    new File(context.getCacheDir(), getNameFromURL(pdfUrl)).getAbsolutePath());
+        }else{
+            downloadFile.download(pdfUrl,
+                    new File(context.getCacheDir(), FileUtil.extractFileNameFromURL(pdfUrl)).getAbsolutePath());
+        }
+    }
+
+    private String getNameFromURL(String url){
+        String name = "";
+
+        int index = url.indexOf("document/") + 9;
+        int index2 = url.indexOf("/access_token");
+
+        name = url.substring(index, index2);
+
+        return name;
     }
 
     private void init(AttributeSet attrs) {
@@ -58,7 +74,7 @@ public class RemotePDFViewPager extends ViewPager implements DownloadFile.Listen
             String pdfUrl = a.getString(R.styleable.PDFViewPager_pdfUrl);
 
             if (pdfUrl != null && pdfUrl.length() > 0) {
-                init(pdfUrl);
+                init(pdfUrl, false);
             }
 
             a.recycle();
