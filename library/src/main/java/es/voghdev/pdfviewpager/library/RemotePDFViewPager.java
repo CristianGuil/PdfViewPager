@@ -20,22 +20,24 @@ import android.content.res.TypedArray;
 import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 import java.io.File;
 
+import es.voghdev.pdfviewpager.library.adapter.MyViewPager;
 import es.voghdev.pdfviewpager.library.remote.DownloadFile;
 import es.voghdev.pdfviewpager.library.remote.DownloadFileUrlConnectionImpl;
 import es.voghdev.pdfviewpager.library.util.FileUtil;
 
-public class RemotePDFViewPager extends ViewPager implements DownloadFile.Listener {
+public class RemotePDFViewPager extends MyViewPager implements DownloadFile.Listener {
     protected Context context;
     protected DownloadFile.Listener listener;
 
-    public RemotePDFViewPager(Context context, String pdfUrl, boolean withParams, DownloadFile.Listener listener) {
+    public RemotePDFViewPager(Context context, String pdfUrl, DownloadFile.Listener listener) {
         super(context);
         this.context = context;
         this.listener = listener;
-        init(pdfUrl, withParams);
+        init(pdfUrl);
     }
 
     public RemotePDFViewPager(Context context, AttributeSet attrs) {
@@ -44,26 +46,10 @@ public class RemotePDFViewPager extends ViewPager implements DownloadFile.Listen
         init(attrs);
     }
 
-    private void init(String pdfUrl, boolean withParams) {
+    private void init(String pdfUrl) {
         DownloadFile downloadFile = new DownloadFileUrlConnectionImpl(context, new Handler(), this);
-        if(withParams){
-            downloadFile.download(pdfUrl,
-                    new File(context.getCacheDir(), getNameFromURL(pdfUrl)).getAbsolutePath());
-        }else{
             downloadFile.download(pdfUrl,
                     new File(context.getCacheDir(), FileUtil.extractFileNameFromURL(pdfUrl)).getAbsolutePath());
-        }
-    }
-
-    private String getNameFromURL(String url){
-        String name = "";
-
-        int index = url.indexOf("document/") + 9;
-        int index2 = url.indexOf("/access_token");
-
-        name = url.substring(index, index2);
-
-        return name;
     }
 
     private void init(AttributeSet attrs) {
@@ -74,7 +60,7 @@ public class RemotePDFViewPager extends ViewPager implements DownloadFile.Listen
             String pdfUrl = a.getString(R.styleable.PDFViewPager_pdfUrl);
 
             if (pdfUrl != null && pdfUrl.length() > 0) {
-                init(pdfUrl, false);
+                init(pdfUrl);
             }
 
             a.recycle();
