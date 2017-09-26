@@ -21,9 +21,10 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import es.voghdev.pdfviewpager.library.adapter.MyViewPager;
 import es.voghdev.pdfviewpager.library.adapter.PDFPagerAdapter;
 
-public class PDFViewPager extends ViewPager {
+public class PDFViewPager extends MyViewPager {
     protected Context context;
 
     public PDFViewPager(Context context, String pdfPath) {
@@ -69,17 +70,4 @@ public class PDFViewPager extends ViewPager {
                 .create());
     }
 
-    /**
-     * PDFViewPager uses PhotoView, so this bugfix should be added
-     * Issue explained in https://github.com/chrisbanes/PhotoView
-     */
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        try {
-            return super.onInterceptTouchEvent(ev);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
 }

@@ -10,7 +10,6 @@ import android.view.MotionEvent;
  */
 
 public class MyViewPager extends ViewPager {
-    private boolean paging = true;
 
     public MyViewPager(Context context) {
         super(context);
@@ -20,16 +19,14 @@ public class MyViewPager extends ViewPager {
         super(context, attributeSet);
     }
 
-
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent e) {
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
         try {
-            return super.onTouchEvent(e);
-        } catch (IllegalArgumentException ex) {
-            ex.printStackTrace();
+            return super.onInterceptTouchEvent(ev);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            return false;
         }
-
-        return false;
     }
 
 }
