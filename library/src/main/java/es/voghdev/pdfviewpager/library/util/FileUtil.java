@@ -41,7 +41,18 @@ public class FileUtil {
         return true;
     }
 
-    public static String extractFileNameFromURL(String url) {
+    public static String extractFileNameFromURLHeadline(String url) {
+        String name = "";
+
+        int start = url.indexOf("headline/")+9;
+        int end = url.indexOf("&access_token");
+
+        name = url.substring(start, end);
+
+        return name;
+    }
+
+    public static String extractFileNameFromURLDocument(String url) {
         String name = "";
 
         int start = url.indexOf("document/")+9;

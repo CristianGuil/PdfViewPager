@@ -33,11 +33,11 @@ public class RemotePDFViewPager extends MyViewPager implements DownloadFile.List
     protected Context context;
     protected DownloadFile.Listener listener;
 
-    public RemotePDFViewPager(Context context, String pdfUrl, DownloadFile.Listener listener) {
+    public RemotePDFViewPager(Context context, String pdfUrl, String namePdf, DownloadFile.Listener listener) {
         super(context);
         this.context = context;
         this.listener = listener;
-        init(pdfUrl);
+        init(pdfUrl, namePdf);
     }
 
     public RemotePDFViewPager(Context context, AttributeSet attrs) {
@@ -46,10 +46,10 @@ public class RemotePDFViewPager extends MyViewPager implements DownloadFile.List
         init(attrs);
     }
 
-    private void init(String pdfUrl) {
+    private void init(String pdfUrl, String namePdf) {
         DownloadFile downloadFile = new DownloadFileUrlConnectionImpl(context, new Handler(), this);
             downloadFile.download(pdfUrl,
-                    new File(context.getCacheDir(), FileUtil.extractFileNameFromURL(pdfUrl)).getAbsolutePath());
+                    new File(context.getCacheDir(), namePdf).getAbsolutePath());
     }
 
     private void init(AttributeSet attrs) {
