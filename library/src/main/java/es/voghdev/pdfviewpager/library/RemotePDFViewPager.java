@@ -58,9 +58,10 @@ public class RemotePDFViewPager extends MyViewPager implements DownloadFile.List
 
             a = context.obtainStyledAttributes(attrs, R.styleable.PDFViewPager);
             String pdfUrl = a.getString(R.styleable.PDFViewPager_pdfUrl);
+            String namePdf = a.getString(R.styleable.PDFViewPager_pdfUrl);
 
             if (pdfUrl != null && pdfUrl.length() > 0) {
-                init(pdfUrl);
+                init(pdfUrl, namePdf);
             }
 
             a.recycle();
